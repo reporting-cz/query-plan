@@ -1,10 +1,7 @@
-﻿import * as xml from "./xml";
+﻿import { renderPlan } from "./render";
 import { drawLines } from "./lines";
 import { initTooltip } from "./tooltip";
 import { Node } from "./node";
-
-declare function require(path: string) : any;
-let qpXslt = require("raw-loader!./qp.xslt");
 
 interface Options {
     jsTooltips?: boolean
@@ -15,8 +12,10 @@ function showPlan(container: Element, planXml: string, options?: Options) {
         jsTooltips: true
     });
 
-    xml.setContentsUsingXslt(container, planXml, qpXslt);
-    container["xml"] = new DOMParser().parseFromString(planXml, "text/xml");
+    let xmlDoc = new DOMParser().parseFromString(planXml, "text/xml");
+    container.innerHTML = "";
+    container.appendChild(renderPlan(xmlDoc));
+    container["xml"] = xmlDoc;
     drawLines(container);
 
     if (options.jsTooltips) {
