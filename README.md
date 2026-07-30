@@ -2,6 +2,12 @@
 
 html-query-plan is a JavaScript library for showing Microsoft SQL Server execution plans in HTML.
 
+This is a fork of [JustinPealing/html-query-plan](https://github.com/JustinPealing/html-query-plan)
+that renders plans in pure TypeScript instead of the original XSLT stylesheet, because
+`XSLTProcessor` [is deprecated](https://chromestatus.com/feature/5172738471690240) and will be
+removed from browsers. The rendered markup is identical to the XSLT output, so existing CSS
+and tooling keep working.
+
 ![html-query-plan screenshot](screenshot.png "Screenshot")
 
 To use in a web page:
@@ -37,13 +43,14 @@ Additional options can be passed using the 3rd argument:
 | --- | --- | --- | 
 | jsTooltips | true | Set to `false` to use CSS tooltips. | 
 
-## Running XSLT separately
+## Pre-rendered plans
 
-Under the covers, html-query-plan is an XSLT 1.0 stylesheet (`qp.xslt`), which can be used to pre-render the plan html. Javascript is still needed to draw the connecting lines. To do this, follow the above steps but call `QP.drawLines` instead:
+If the plan HTML has already been rendered (e.g. server-side), JavaScript is still needed to
+draw the connecting lines. To do this, follow the above steps but call `QP.drawLines` instead:
 
 ```
 <div id="container">
-    <!-- Insert XSLT output here -->
+    <!-- Insert pre-rendered plan HTML here -->
 </div>
 <script>
     QP.drawLines(document.getElementById("container"));
